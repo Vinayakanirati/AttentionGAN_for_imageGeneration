@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AttnGAN Text-to-Image</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: radial-gradient(circle, #1a1a1a, #000);
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Animated Eyes Background */
+    .eyecontainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .eyes {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
+    }
+
+    .eye1 {
+      left: 25%;
+      top: 15%;
+    }
+
+    .eye2 {
+      right: 25%;
+      top: 15%;
+    }
+
+    .pupils {
+      width: 35px;
+      height: 35px;
+      background: black;
+      border-radius: 50%;
+      transition: transform 0.1s ease-out;
+    }
+
+    /* Main Content */
+    .form-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      z-index: 1;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+      width: 300px;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-bottom: 2px solid white;
+      background: transparent;
+      color: white;
+      margin-bottom: 20px;
+      outline: none;
+    }
+    .header{
+      display: flex;
+      position: fixed;
+      top:10px;
+      right:50px;
+      flex-direction: row;
+    }
+    button {
+      padding: 10px 20px;
+      background: #17a5a6;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 0 15px rgba(23, 165, 166, 0.7);
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #1abc9c;
+    }
+
+    .output-image {
+      margin-top: 25px;
+    }
+
+    .output-image img {
+  image-rendering: auto;      /* default */
+  image-rendering: smooth;    /* for some browsers */
+}
+
+  </style>
+</head>
+<header class="header">
+  <nav><a href="#"><li>Home</li></a></nav>
+  <nav><a href="#"><li>Register</li></a></nav>
+  <nav><a href="#"><li>Login</li></a></nav>
+</header>
+<body>
+
+  <!-- Eyes Background -->
+  <div class="eyecontainer">
+    <div class="eyes eye1"><div class="pupils"></div></div>
+    <div class="eyes eye2"><div class="pupils"></div></div>
+  </div>
+
+  <!-- Text-to-Image Form -->
+  <div class="form-box">
+    <h2>Generate an Image from Text</h2>
+    <form method="POST" action="/generate">
+      <input type="text" name="text" placeholder="e.g. A yellow bird with black wings" required>
+      <br>
+      <button type="submit">Generate</button>
+    </form>
+
+    {% if generated_image %}
+    <div class="output-image">
+      <h3>Generated Image:</h3>
+      <img src="{{ url_for('static', filename='generated/result.png') }}" 
+     style="max-width: 100%; height: auto; image-rendering: smooth;" />
+
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Eye Movement Script -->
+  <script>
+    const pupils = document.querySelectorAll('.pupils');
+    document.addEventListener('mousemove', (e) => {
+      const eyes = document.querySelectorAll('.eyes');
+      eyes.forEach((eye, index) => {
+        const rect = eye.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const dx = e.clientX - centerX;
+        const dy = e.clientY - centerY;
+        const angle = Math.atan2(dy, dx);
+        const radius = 20;
+        pupils[index].style.transform = `translate(${Math.cos(angle) * radius}px, ${Math.sin(angle) * radius}px)`;
+      });
+    });
+  </script>
+</body>
+</html>

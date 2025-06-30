@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Magical Eyes Login</title>
+  
+  <style>
+ 
+   
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: radial-gradient(circle, #1a1a1a, #000);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .eyecontainer {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index:200;
+    }
+
+    .eyes {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
+      transition: background 2s ease;
+    }
+
+    .pupils {
+      position: relative;
+      width: 35px;
+      height: 35px;
+      background: black;
+      border-radius: 50%;
+      transition: transform 0.1s ease-out;
+    }
+
+    .eye1 { left: -80px; top: -50px; }
+    .eye2 { right: -80px; top: -50px; }
+
+    .form {
+      position: relative;
+      background: rgba(255, 255, 255, 0.1);
+      width: 280px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      transition: background 0.5s ease;
+      margin-top: 100px;
+      margin-bottom :0px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+      color: white;
+      text-align: center;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      background: rgba(23, 165, 166, 0.8);
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(23, 165, 166, 0.7);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .eyes.green { background: lightgreen !important; box-shadow: 0 0 25px rgba(0, 255, 0, 0.8); }
+    .eyes.red { background: red !important; box-shadow: 0 0 25px rgba(255, 0, 0, 0.8); }
+
+    .curve {
+  position: fixed;
+  width: 208px;
+  height: 60px;
+  border: 6px solid transparent;
+  border-radius: 33px;
+  bottom: 20px;  /* Adjusted higher so it stays near form */
+  transition: all 2s ease;
+}
+
+.happy {
+  border-top: 6px solid lightgreen;
+  transform: rotate(180deg);
+}
+
+.sad {
+  border-top: 6px solid red;
+  transform: rotate(0deg);
+}
+    /* Social Icons */
+    .social-icons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-icons img {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .social-icons img:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+ 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+       }
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+  <div class="eyecontainer">
+    <div class="eyes eye1"><div class="pupils"></div></div>
+    <div class="eyes eye2"><div class="pupils"></div></div>
+
+    <div class="form">
+      <input id="username" type="text" placeholder="Enter Username">
+     
+  <input id="password" type="password" placeholder="Enter Password" style="width: 100%; padding-right: 40px;">
+  
+  </span>
+</div>
+      <button onclick="validateLogin()">Submit</button>
+
+      <!-- Social Icons for Registration -->
+      <div class="social-icons">
+        <a href="https://accounts.google.com/signup"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="Google"></a>
+        <a href="https://github.com/signup"><img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub"></a>
+        <a href="https://www.linkedin.com/signup"><img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="LinkedIn"></a>
+      </div>
+    </div>
+
+    <div class="curve"></div>
+  </div>
+
+  <script>
+    const eyes = document.querySelectorAll('.eyes');
+    const pupils = document.querySelectorAll('.pupils');
+    const curve = document.querySelector('.curve');
+
+    document.addEventListener('mousemove', (e) => {
+      eyes.forEach((eye, index) => {
+        const rect = eye.getBoundingClientRect();
+        const eyeCenterX = rect.left + rect.width / 2; 
+        const eyeCenterY = rect.top + rect.height / 2; 
+        const deltaX = e.clientX - eyeCenterX;
+        const deltaY = e.clientY - eyeCenterY; 
+        const angle = Math.atan2(deltaY, deltaX);
+        const maxMove = 25;
+        const moveX = Math.cos(angle) * maxMove;
+        const moveY = Math.sin(angle) * maxMove;
+
+        pupils[index].style.transform = translate(${moveX}px, ${moveY}px);  
+      });
+    });
+  
+const passwordInput = document.getElementById("password");
+let isPasswordVisible = false;
+
+eyes.forEach(eye => {
+  eye.addEventListener("click", function() {
+    isPasswordVisible = !isPasswordVisible;
+    passwordInput.type = isPasswordVisible ? "text" : "password";
+
+    // Animate pupils when toggling
+    document.querySelectorAll(".pupils").forEach(pupil => {
+      pupil.style.transform = isPasswordVisible ? "scale(1.5)" : "scale(1)";
+    });
+  });
+});
+
+    function validateLogin() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "Vinayaka" && password === "Vinay@1432") {
+        eyes.forEach(eye => {eye.classList.remove("red")
+          eye.classList.add("green")});
+        curve.classList.remove("sad");
+        curve.classList.add("happy");
+      } else {
+        eyes.forEach(eye => eye.classList.add("red"));
+        curve.classList.remove("happy");
+        curve.classList.add("sad");
+      }
+    }
+  </script>
+</body>
+</html>

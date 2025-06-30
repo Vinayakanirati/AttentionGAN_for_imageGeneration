@@ -1,0 +1,72 @@
+<!-- static/styles.css -->
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(#222, #000);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #fff;
+}
+.eyes-container {
+  display: flex;
+  gap: 40px;
+  margin-top: 40px;
+}
+.eye {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate-eye 2s linear infinite;
+}
+.eye::before {
+  content: '';
+  width: 30px;
+  height: 30px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 25px;
+  left: 25px;
+}
+.green-eye {
+  background: #c5ffc5;
+}
+.red-eye {
+  background: #ffb3b3;
+}
+@keyframes rotate-eye {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.login-box, .generate-box {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+input, button {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+button {
+  background: #0ff;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+.generated-img {
+  margin-top: 15px;
+  width: 256px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #0ff;
+}
